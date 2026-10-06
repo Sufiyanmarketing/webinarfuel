@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Takk for påmeldingen — Prinsipper for en sterkere rygg</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blush:#F2D1D2;--blue-soft:#D6E4EF;--blue-deep:#5A8AB5;--blue-tint:#ECF2F8;--pink:#FF66C4;--pink-dark:#E04EAB;--ink:#1F1A24;--ink-soft:#4A4350;--muted:#7A7280;--cream:#FAF6F4;--line:#EBE3E3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--cream);line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}a{text-decoration:none;color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.serif{font-family:'Playfair Display',serif}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:100px;font-weight:700;font-size:14px;margin:6px 6px 0 0;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-pink{background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff}
+.btn-blue{background:var(--blue-tint);border:1.5px solid var(--blue-soft);color:var(--blue-deep)}
+
+/* HERO */
+.hero{background:radial-gradient(120% 80% at 90% 0%,rgba(134,174,208,.28),transparent 60%),radial-gradient(120% 90% at 0% 100%,rgba(242,209,210,.55),transparent 60%),#FCF0F1;padding:56px 0 48px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--pink-dark)}
+.hero h1{font-weight:800;font-size:clamp(32px,5vw,50px);line-height:1.05;margin:10px 0 14px}
+.hero h1 .nm{color:var(--pink-dark);font-style:italic}
+.lead{font-size:17px;color:var(--ink-soft);max-width:46ch}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 8px}
+.pill{background:#fff;border:1px solid var(--line);border-radius:100px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--ink-soft)}
+.photo{border-radius:24px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(135deg,var(--blush),var(--blue-soft));box-shadow:0 24px 50px rgba(31,26,36,.16)}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+
+/* STEPS */
+.sec{padding:52px 0}
+.h2{font-weight:700;font-size:clamp(26px,3.4vw,34px);text-align:center}
+.h2 em{color:var(--pink-dark)}
+.steps{max-width:720px;margin:28px auto 0;display:grid;gap:12px}
+.step{display:flex;gap:16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.num{flex-shrink:0;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--pink-dark));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.step h3{font-size:18px;margin-bottom:2px}
+.step p{font-size:15px;color:var(--ink-soft)}
+
+/* SIGN-OFF */
+.sign{background:linear-gradient(180deg,#FBEFEF,#FCF4F5);padding:52px 0}
+.sign-grid{display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center;max-width:820px;margin:0 auto}
+.sign-photo{border-radius:20px;overflow:hidden;aspect-ratio:3/4;background:var(--blush)}
+.sign-photo img{width:100%;height:100%;object-fit:cover}
+.sign h2{font-weight:800;font-size:clamp(28px,4vw,40px);line-height:1.05}
+.sign p{margin:12px 0 4px;color:var(--ink-soft)}
+.sig{font-family:'Playfair Display',serif;font-style:italic;font-size:24px;color:var(--pink-dark);margin:6px 0 10px}
+.fb{background:#3F6F92;color:#fff}.ig{background:linear-gradient(135deg,#FF66C4,#B83585);color:#fff}
+footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;padding:22px;font-size:13px}
+
+@media(max-width:800px){
+  .hero-grid,.sign-grid{grid-template-columns:1fr;text-align:center}
+  .photo{order:-1;aspect-ratio:16/10}
+  .lead{margin:0 auto}.pills{justify-content:center}
+  .sign-photo{max-width:200px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">✓ Du er påmeldt</span>
+      <h1 class="serif">Så gøy at du blir med<span class="nm" id="tyName"></span>!</h1>
+      <p class="lead">Du får straks en bekreftelse på e-post med lenken til foredraget <strong id="tyDateInline">søndag kl. 10</strong>. Finner du den ikke, sjekk søppelposten.</p>
+      <div class="pills">
+        <span class="pill">🗓 <span id="tyDatePill">Søndag</span></span>
+        <span class="pill">🕙 kl. 10:00</span>
+        <span class="pill">💻 Live på nett</span>
+      </div>
+      <a class="btn btn-pink" id="tyJoinBtn" href="#" target="_blank" rel="noopener" style="display:none">▶ Bli med på foredraget</a>
+      <a class="btn btn-blue" id="tyCal" href="#" target="_blank" rel="noopener">📅 Legg til i Google Kalender</a>
+    </div>
+    <div class="photo"><img src="https://kajabi-storefronts-production.s3.amazonaws.com/file-uploads/sites/171479/images/f8a63-bef-2886-3260-c2466428156_download_5_.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAI4TIKYMSB4PQMFBA%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20261006T064840Z&amp;X-Amz-Expires=604800&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=77bd2d11719cc6b3198016e68974d5ad8fb337f120661f4e2d39a8e1ce3abd4e" alt="Maiken Lund løper langs en innsjø"></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <h2 class="h2 serif">Gjør <em>dette nå</em></h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><h3 class="serif">Legg det inn i kalenderen</h3><p id="tyCalText">Søndag kl. 10 — sett av en time.</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3 class="serif">Finn fram penn og papir</h3><p>Vi tar <strong>Ryggtesten</strong> sammen — den viser hva nettopp din rygg trenger.</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3 class="serif">Inviter gjerne en venn</h3><p>Kjenner du noen som sliter med ryggen? Det er hyggeligere å være to.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sign">
+  <div class="wrap sign-grid">
+    <div class="sign-photo"><img src="https://kajabi-storefronts-production.s3.amazonaws.com/file-uploads/sites/171479/images/c7bb2c2-047-e0e-17ee-1a0304daa0eb_download_6_.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAI4TIKYMSB4PQMFBA%2F20261006%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20261006T064937Z&amp;X-Amz-Expires=604800&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=8749704cba9441ee73cf7ccd546ac8b2991ab71fd47bb1c92059b09606de1b29" alt="Maiken Lund"></div>
+    <div>
+      <h2 class="serif">Vi sees søndag!</h2>
+      <p>Gled deg — vi bygger ryggen din opp fra grunnmuren, sammen. Følg meg gjerne for tips og øvelser mens du venter.</p>
+      <div class="sig">Klem fra Maiken</div>
+      <a class="btn fb" href="https://www.facebook.com/profile.php?id=100089070669599" target="_blank" rel="noopener">Facebook</a>
+      <a class="btn ig" href="https://www.instagram.com/naprapat_maiken/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Maiken Lund · Naprapat</footer>
+
+<script>
+(function(){
+  // Webinar schedule: every Sunday 10:00 Europe/Oslo
+  var WBN_DAY=0, WBN_HOUR=10;
+
+  var p=new URLSearchParams(location.search),$=function(id){return document.getElementById(id)};
+  var n=p.get('navn')||p.get('first_name')||p.get('name')||p.get('fornavn');
+  if(n){n=n.trim().split(' ')[0].replace(/[<>]/g,'');if(n)$('tyName').textContent=', '+n.charAt(0).toUpperCase()+n.slice(1);}
+
+  // Join button: only the personal WebinarFuel link (hidden if missing)
+  var joinLink=p.get('join_link'),calLink=p.get('cal_link');
+  if(joinLink){$('tyJoinBtn').href=joinLink;$('tyJoinBtn').style.display='';}
+
+  function off(d){return new Date(d.toLocaleString('en-US',{timeZone:'Europe/Oslo'}))-new Date(d.toLocaleString('en-US',{timeZone:'UTC'}));}
+  function nextWebinar(){
+    var now=new Date(),o=off(now),t=new Date(now.getTime()+o),
+        add=(WBN_DAY-t.getUTCDay()+7)%7;
+    if(add===0&&t.getUTCHours()>=WBN_HOUR)add=7;
+    var target=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate())+add*864e5+WBN_HOUR*36e5);
+    return new Date(target.getTime()-off(new Date(target.getTime()-o)));
+  }
+  function ics(d){return d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';}
+
+  var m=['januar','februar','mars','april','mai','juni','juli','august','september','oktober','november','desember'];
+  var start=nextWebinar(),parts={};
+  new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Oslo',day:'numeric',month:'numeric'}).formatToParts(start).forEach(function(x){parts[x.type]=x.value});
+  var label=parts.day+'. '+m[parts.month-1];
+  $('tyDateInline').textContent='søndag '+label+' kl. 10';
+  $('tyDatePill').textContent='Søndag '+label;
+  $('tyCalText').textContent='Søndag '+label+' kl. 10 — sett av en time, så du ikke går glipp av det.';
+
+  if(calLink){$('tyCal').href=calLink;}
+  else{
+    var end=new Date(start.getTime()+75*6e4);
+    var details='Live foredrag med naprapat Maiken Lund.\n'
+      +(joinLink?'Bli med her: '+joinLink+'\n':'Lenken til foredraget finner du på e-post.\n')
+      +'\nTa med penn og papir til Ryggtesten.';
+    $('tyCal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Prinsipper for en sterkere rygg — gratis live foredrag')
+      +'&dates='+ics(start)+'/'+ics(end)
+      +'&details='+encodeURIComponent(details)
+      +(joinLink?'&location='+encodeURIComponent(joinLink):'');
+  }
+})();
+</script>
+</body>
+</html>
