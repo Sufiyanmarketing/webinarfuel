@@ -7,9 +7,10 @@
      Recurring Sunday webinar (every Sunday 10:00 Europe/Oslo).
      Auto-rolling countdown targets the next upcoming Sunday.
 
-     Form submits to the Zapier webhook (the Zap registers the person
-     on WebinarFuel) and to Kajabi form 2149623997, then redirects to
-     the thank-you page.
+     Form submits to the Zapier webhook (CRM/automation) and Kajabi
+     form 2149623997, registers on WebinarFuel via API (name, email,
+     phone) and redirects to the thank-you page with the personal
+     join link + calendar link.
 
      Paste this entire block into your Kajabi Custom Code section.
 ============================================================ -->
@@ -1710,11 +1711,17 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
   // ===== ZAPIER WEBHOOK =====
   var ZAPIER_HOOK = 'https://hooks.zapier.com/hooks/catch/29014100/4msm9k3/';
 
-  // ===== WEBINAR + THANK-YOU PAGE =====
-  // Registration on WebinarFuel is done by the Zap (no WF API key in this page).
-  var THANK_YOU_URL = 'https://www.naprapatmaiken.no/thx-page';
-  var WF_WEBINAR_ID = '20869';
-  var WF_SESSION_ID = '77419'; // recurring: "Every Week On Sunday At 10:00 AM"
+  // ===== WEBINARFUEL CONFIG (registers + gets join link and calendar link) =====
+  var WF_CONFIG = {
+    apiKey:           'DfEy9FHTMw1njDPi3CJgn46s',
+    webinarId:        20869,
+    webinarSessionId: 77419, // recurring: "Every Week On Sunday At 10:00 AM"
+    timezone:         'Europe/Oslo',
+    thankYouPageUrl:  'https://www.naprapatmaiken.no/thx-page'
+  };
+  var THANK_YOU_URL = WF_CONFIG.thankYouPageUrl;
+  var WF_WEBINAR_ID = String(WF_CONFIG.webinarId);
+  var WF_SESSION_ID = String(WF_CONFIG.webinarSessionId);
 
   // ===== WEBINAR SCHEDULE: every Sunday 10:00 Europe/Oslo =====
   var WBN_DAY  = 0;  // 0=Sunday
@@ -1774,7 +1781,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     if(e.key === 'Escape') maikenCloseModal();
   });
 
-  // ===== FORM SUBMIT → ZAPIER + KAJABI =====
+  // ===== FORM SUBMIT → ZAPIER + KAJABI + WEBINARFUEL =====
   window.maikenSubmitForm = function(e){
     e.preventDefault();
 
@@ -1790,7 +1797,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     var telefonRaw = document.getElementById('maiken_telefon').value.replace(/\s/g,'').replace(/[^\d]/g,'');
     var telefon = '+47' + telefonRaw;
 
-    // 1) Send to Zapier → the Zap registers the person on WebinarFuel
+    // 1) Send to Zapier (CRM/automation)
     var wbnStart = getNextWebinar();
     var wbnLabels = getDateLabels(wbnStart);
     var navnParts = navn.split(/\s+/);
@@ -1815,12 +1822,12 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
       if(val) zapData.append(key, val);
     });
 
-    var zapSent = fetch(ZAPIER_HOOK, {
+    fetch(ZAPIER_HOOK, {
       method: 'POST',
       body: zapData,
       keepalive: true
     }).catch(function(err){
-      console.warn('Zapier webhook error:', err);
+      console.warn('Zapier webhook error (non-blocking):', err);
     });
 
     // 2) Fire-and-forget Kajabi form submission
@@ -1835,15 +1842,53 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
       body: kajabiData
     }).catch(function(err){ console.warn('Kajabi form error (non-blocking):', err); });
 
-    // 3) Wait for Zapier (max 4 sec), then go to the thank-you page
-    var redirected = false;
-    function goThankYou(){
-      if(redirected) return;
-      redirected = true;
+    // 3) WebinarFuel API → register (with phone) → get join + calendar link → thank-you page
+    fetch('https://api.webinarfuel.com/registrants', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + WF_CONFIG.apiKey,
+        'Content-Type':  'application/json',
+        'Accept':        'application/json'
+      },
+      body: JSON.stringify({
+        webinar_id: WF_CONFIG.webinarId,
+        registrant: {
+          email:      email,
+          first_name: navnParts[0] || navn,
+          last_name:  navnParts.slice(1).join(' '),
+          phone:      telefonRaw ? telefon : ''
+        },
+        session: {
+          webinar_session_id: WF_CONFIG.webinarSessionId,
+          timezone:           WF_CONFIG.timezone
+        }
+      })
+    })
+    .then(function(res){
+      if(!res.ok) throw new Error('WF API ' + res.status);
+      return res.json();
+    })
+    .then(function(data){
+      // Links live in registrant.sessions[] — pick the session for our webinar
+      var reg = (data && (data.registrant || data)) || {};
+      var sessions = reg.sessions || (data && data.sessions) || [];
+      var sess = sessions.filter(function(x){ return String(x.webinar_session_id) === WF_SESSION_ID; })[0]
+              || sessions[sessions.length - 1] || data || {};
+      var cal = sess.calendar_urls || {};
+
+      var params = new URLSearchParams();
+      params.set('navn', navn);
+      var joinLink = sess.join_url || data.join_url;
+      if(joinLink) params.set('join_link', joinLink);
+      var calLink = cal.google || cal.ics || data.calendar_url;
+      if(calLink) params.set('cal_link', calLink);
+
+      window.location.href = THANK_YOU_URL + '?' + params.toString();
+    })
+    .catch(function(err){
+      console.error('WebinarFuel API error:', err);
       window.location.href = THANK_YOU_URL + '?navn=' + encodeURIComponent(navn);
-    }
-    zapSent.then(goThankYou);
-    setTimeout(goThankYou, 4000);
+    });
   };
 
   // ===== AUTO-ROLLING SUNDAY COUNTDOWN =====
