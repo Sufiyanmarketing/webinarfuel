@@ -1727,6 +1727,22 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
   var WBN_DAY  = 0;  // 0=Sunday
   var WBN_HOUR = 10; // 10:00
 
+  // ===== UTM TRACKING =====
+  // Saved on page load so UTMs survive even if the URL changes before sign-up.
+  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  function getUtms(){
+    var url = new URLSearchParams(window.location.search);
+    var saved = {};
+    try { saved = JSON.parse(sessionStorage.getItem('maiken_utms') || '{}'); } catch(e){}
+    var out = {};
+    UTM_KEYS.forEach(function(k){
+      var v = url.get(k) || saved[k];
+      if(v) out[k] = v;
+    });
+    return out;
+  }
+  try { sessionStorage.setItem('maiken_utms', JSON.stringify(getUtms())); } catch(e){}
+
   // ===== KAJABI CHROME KILLER =====
   function killKajabi(){
     var tags = ['header','footer','nav'];
@@ -1816,10 +1832,9 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     zapData.append('timestamp', new Date().toISOString());
     zapData.append('page_url', window.location.href);
 
-    var pageParams = new URLSearchParams(window.location.search);
-    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(key){
-      var val = pageParams.get(key);
-      if(val) zapData.append(key, val);
+    var utms = getUtms();
+    UTM_KEYS.forEach(function(key){
+      if(utms[key]) zapData.append(key, utms[key]);
     });
 
     fetch(ZAPIER_HOOK, {
@@ -1842,7 +1857,16 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
       body: kajabiData
     }).catch(function(err){ console.warn('Kajabi form error (non-blocking):', err); });
 
-    // 3) WebinarFuel API → register (with phone) → get join + calendar link → thank-you page
+    // 3) WebinarFuel API → register (with phone + UTMs) → get join + calendar link → thank-you page
+    var wfSession = {
+      webinar_session_id: WF_CONFIG.webinarSessionId,
+      timezone:           WF_CONFIG.timezone
+    };
+    UTM_KEYS.forEach(function(key){
+      if(utms[key]) wfSession[key] = utms[key];
+    });
+    if(document.referrer) wfSession.referrer = document.referrer;
+
     fetch('https://api.webinarfuel.com/registrants', {
       method: 'POST',
       headers: {
@@ -1858,10 +1882,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
           last_name:  navnParts.slice(1).join(' '),
           phone:      telefonRaw ? telefon : ''
         },
-        session: {
-          webinar_session_id: WF_CONFIG.webinarSessionId,
-          timezone:           WF_CONFIG.timezone
-        }
+        session: wfSession
       })
     })
     .then(function(res){
