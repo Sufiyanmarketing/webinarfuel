@@ -1,2 +1,3 @@
 # Registrant exports contain personal data (emails, phones) — never commit
 maiken-registrants-*.csv
+maiken-not-attended-*.csv
