@@ -1880,7 +1880,8 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
           email:      email,
           first_name: navnParts[0] || navn,
           last_name:  navnParts.slice(1).join(' '),
-          phone:      telefonRaw ? telefon : ''
+          phone:      telefonRaw ? telefon : '',
+          tags:       ['page']
         },
         session: wfSession
       })
@@ -1890,6 +1891,20 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
       return res.json();
     })
     .then(function(data){
+      // Make sure tag "page" is also set if the person was already registered before
+      try {
+        fetch('https://api.webinarfuel.com/registrants/add_tags', {
+          method: 'POST',
+          keepalive: true,
+          headers: {
+            'Authorization': 'Bearer ' + WF_CONFIG.apiKey,
+            'Content-Type':  'application/json',
+            'Accept':        'application/json'
+          },
+          body: JSON.stringify({ email: email, tags: ['page'] })
+        }).catch(function(){});
+      } catch(e) {}
+
       // Links live in registrant.sessions[] — pick the session for our webinar
       var reg = (data && (data.registrant || data)) || {};
       var sessions = reg.sessions || (data && data.sessions) || [];
