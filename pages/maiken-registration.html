@@ -4,8 +4,8 @@
      Brand: #F2D1D2 blush · #86AED0 sky blue · #FF66C4 bright pink
      Kajabi-safe: all styles scoped under .maiken-lp
 
-     Recurring Sunday webinar (every Sunday 10:00 Europe/Oslo).
-     Auto-rolling countdown targets the next upcoming Sunday.
+     Recurring Saturday webinar (every Saturday 10:00 Europe/Oslo).
+     Auto-rolling countdown targets the next upcoming Saturday.
 
      Form submits to the Zapier webhook (CRM/automation) and Kajabi
      form 2149623997, registers on WebinarFuel via API (name, email,
@@ -1387,7 +1387,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
   <!-- ============ TOP BAR ============ -->
   <div class="maiken-top-bar" onclick="maikenOpenModal()" style="cursor:pointer;" title="Meld deg på gratis">
     <div class="maiken-top-bar-inner">
-      <span class="urg-text"><span class="dot"></span>GRATIS LIVE-FOREDRAG · SØNDAG KL. 10:00</span>
+      <span class="urg-text"><span class="dot"></span>GRATIS LIVE-FOREDRAG · LØRDAG KL. 10:00</span>
       <div class="countdown" id="maikenCountdown">
         <div class="cd-unit"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Dager</span></div>
         <div class="cd-unit"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Timer</span></div>
@@ -1403,7 +1403,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
         <span class="maiken-hero-eyebrow">For deg som vil ha en sterkere rygg</span>
         <h1>Prinsipper for en <span class="accent">sterkere</span> <span class="swash">rygg.</span></h1>
         <p class="maiken-hero-lead">
-          Gratis live foredrag <strong id="maikenHeroDate">søndag kl. 10</strong>, med naprapat Maiken Lund.
+          Gratis live foredrag <strong id="maikenHeroDate">lørdag kl. 10</strong>, med naprapat Maiken Lund.
         </p>
         <p class="maiken-hero-sub">
           Lær hva som skal til for å bygge en sterkere rygg, og ta <em>Ryggtesten</em>, en enkel selvtest du gjør sammen med Maiken underveis.
@@ -1630,7 +1630,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
           <div class="maiken-practical-item">
             <span class="ico">🗓</span>
             <span class="lbl">Når</span>
-            <span class="val" id="maikenPracticalDate">Søndag<br>kl. 10</span>
+            <span class="val" id="maikenPracticalDate">Lørdag<br>kl. 10</span>
           </div>
           <div class="maiken-practical-item">
             <span class="ico">💻</span>
@@ -1678,7 +1678,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <h3 class="maiken-modal-title">Meld deg på nå!</h3>
-    <p class="maiken-modal-sub">Gratis live foredrag — <strong class="maiken-modal-date" id="maikenModalDate">Søndag kl. 10:00</strong></p>
+    <p class="maiken-modal-sub">Gratis live foredrag — <strong class="maiken-modal-date" id="maikenModalDate">Lørdag kl. 10:00</strong></p>
     <form id="maikenSignupForm" onsubmit="maikenSubmitForm(event)">
       <div class="form-group">
         <label class="form-label-upper" for="maiken_navn">FULLT NAVN</label>
@@ -1689,7 +1689,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
         <input class="form-input-clean" type="email" id="maiken_epost" placeholder="din@epost.no" required>
       </div>
       <div class="form-group">
-        <label class="form-label-upper" for="maiken_telefon">TELEFONNUMMER</label>
+        <label class="form-label-upper" for="maiken_telefon">TELEFONNUMMER (uten landkode) </label>
         <div class="phone-row-clean">
           <div class="phone-prefix-clean"><span class="flag">🇳🇴</span> +47</div>
           <!-- no name attr: JS copies this into the hidden field with the +47 prefix -->
@@ -1715,7 +1715,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
   var WF_CONFIG = {
     apiKey:           'DfEy9FHTMw1njDPi3CJgn46s',
     webinarId:        20869,
-    webinarSessionId: 77419, // recurring: "Every Week On Sunday At 10:00 AM"
+    webinarSessionId: 77419, // recurring: "Every Week On Saturday At 10:00 AM"
     timezone:         'Europe/Oslo',
     thankYouPageUrl:  'https://www.naprapatmaiken.no/thx-page'
   };
@@ -1723,8 +1723,8 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
   var WF_WEBINAR_ID = String(WF_CONFIG.webinarId);
   var WF_SESSION_ID = String(WF_CONFIG.webinarSessionId);
 
-  // ===== WEBINAR SCHEDULE: every Sunday 10:00 Europe/Oslo =====
-  var WBN_DAY  = 0;  // 0=Sunday
+  // ===== WEBINAR SCHEDULE: every Saturday 10:00 Europe/Oslo =====
+  var WBN_DAY  = 6;  // 6=Saturday
   var WBN_HOUR = 10; // 10:00
 
   // ===== UTM TRACKING =====
@@ -1912,7 +1912,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     });
   };
 
-  // ===== AUTO-ROLLING SUNDAY COUNTDOWN =====
+  // ===== AUTO-ROLLING SATURDAY COUNTDOWN =====
   function getOsloOffset(d) {
     var utc = new Date(d.toLocaleString('en-US', {timeZone: 'UTC'}));
     var oslo = new Date(d.toLocaleString('en-US', {timeZone: 'Europe/Oslo'}));
@@ -1922,7 +1922,7 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     var now = new Date();
     var offset = getOsloOffset(now);
     var osloNow = new Date(now.getTime() + offset);
-    var dayNum = osloNow.getUTCDay(); // 0=Sun
+    var dayNum = osloNow.getUTCDay(); // 0=Sun, 6=Sat
     var daysUntil = (WBN_DAY - dayNum + 7) % 7;
     if (daysUntil === 0 && osloNow.getUTCHours() >= WBN_HOUR) daysUntil = 7;
     var osloMidnight = Date.UTC(osloNow.getUTCFullYear(), osloNow.getUTCMonth(), osloNow.getUTCDate());
@@ -1941,10 +1941,10 @@ a.maiken-cta-primary:hover, .maiken-cta-primary:hover {
     var day = parseInt(p.day);
     var month = parseInt(p.month) - 1;
     return {
-      topbar: 'GRATIS LIVE-FOREDRAG · SØNDAG ' + day + '. ' + months_upper[month] + ' KL. 10:00',
-      hero: 'søndag ' + day + '. ' + months_lower[month] + ' kl. 10',
-      practical: 'Søndag<br>' + day + '. ' + months_lower[month] + ', kl. 10',
-      modal: 'Søndag ' + day + '. ' + months_lower[month] + ' kl. 10:00'
+      topbar: 'GRATIS LIVE-FOREDRAG · LØRDAG ' + day + '. ' + months_upper[month] + ' KL. 10:00',
+      hero: 'lørdag ' + day + '. ' + months_lower[month] + ' kl. 10',
+      practical: 'Lørdag<br>' + day + '. ' + months_lower[month] + ', kl. 10',
+      modal: 'Lørdag ' + day + '. ' + months_lower[month] + ' kl. 10:00'
     };
   }
   var wbnTarget = getNextWebinar();

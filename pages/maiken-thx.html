@@ -66,9 +66,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;paddin
     <div>
       <span class="eyebrow">✓ Du er påmeldt</span>
       <h1 class="serif">Så gøy at du blir med<span class="nm" id="tyName"></span>!</h1>
-      <p class="lead">Du får straks en bekreftelse på e-post med lenken til foredraget <strong id="tyDateInline">søndag kl. 10</strong>. Finner du den ikke, sjekk søppelposten.</p>
+      <p class="lead">Du får straks en bekreftelse på e-post med lenken til foredraget <strong id="tyDateInline">lørdag kl. 10</strong>. Finner du den ikke, sjekk søppelposten.</p>
       <div class="pills">
-        <span class="pill">🗓 <span id="tyDatePill">Søndag</span></span>
+        <span class="pill">🗓 <span id="tyDatePill">Lørdag</span></span>
         <span class="pill">🕙 kl. 10:00</span>
         <span class="pill">💻 Live på nett</span>
       </div>
@@ -83,7 +83,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;paddin
   <div class="wrap">
     <h2 class="h2 serif">Gjør <em>dette nå</em></h2>
     <div class="steps">
-      <div class="step"><div class="num">1</div><div><h3 class="serif">Legg det inn i kalenderen</h3><p id="tyCalText">Søndag kl. 10 — sett av en time.</p></div></div>
+      <div class="step"><div class="num">1</div><div><h3 class="serif">Legg det inn i kalenderen</h3><p id="tyCalText">Lørdag kl. 10 — sett av en time.</p></div></div>
       <div class="step"><div class="num">2</div><div><h3 class="serif">Finn fram penn og papir</h3><p>Vi tar <strong>Ryggtesten</strong> sammen — den viser hva nettopp din rygg trenger.</p></div></div>
       <div class="step"><div class="num">3</div><div><h3 class="serif">Inviter gjerne en venn</h3><p>Kjenner du noen som sliter med ryggen? Det er hyggeligere å være to.</p></div></div>
     </div>
@@ -94,7 +94,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;paddin
   <div class="wrap sign-grid">
     <div class="sign-photo"><img src="https://assets.cdn.filesafe.space/lwz4qXELzwGrsPyJqqLb/media/6ac49bf2bbad531ac8e21ebf.jpeg" alt="Maiken Lund"></div>
     <div>
-      <h2 class="serif">Vi sees søndag!</h2>
+      <h2 class="serif">Vi sees lørdag!</h2>
       <p>Gled deg — vi bygger ryggen din opp fra grunnmuren, sammen. Følg meg gjerne for tips og øvelser mens du venter.</p>
       <div class="sig">Klem fra Maiken</div>
       <a class="btn fb" href="https://www.facebook.com/profile.php?id=100089070669599" target="_blank" rel="noopener">Facebook</a>
@@ -107,8 +107,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;paddin
 
 <script>
 (function(){
-  // Webinar schedule: every Sunday 10:00 Europe/Oslo
-  var WBN_DAY=0, WBN_HOUR=10;
+  // Webinar schedule: every Saturday 10:00 Europe/Oslo
+  var WBN_DAY=6, WBN_HOUR=10;
 
   var p=new URLSearchParams(location.search),$=function(id){return document.getElementById(id)};
   var n=p.get('navn')||p.get('first_name')||p.get('name')||p.get('fornavn');
@@ -132,9 +132,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);text-align:center;paddin
   var start=nextWebinar(),parts={};
   new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Oslo',day:'numeric',month:'numeric'}).formatToParts(start).forEach(function(x){parts[x.type]=x.value});
   var label=parts.day+'. '+m[parts.month-1];
-  $('tyDateInline').textContent='søndag '+label+' kl. 10';
-  $('tyDatePill').textContent='Søndag '+label;
-  $('tyCalText').textContent='Søndag '+label+' kl. 10 — sett av en time, så du ikke går glipp av det.';
+  $('tyDateInline').textContent='lørdag '+label+' kl. 10';
+  $('tyDatePill').textContent='Lørdag '+label;
+  $('tyCalText').textContent='Lørdag '+label+' kl. 10 — sett av en time, så du ikke går glipp av det.';
 
   if(calLink){$('tyCal').href=calLink;}
   else{
